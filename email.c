@@ -1,3 +1,8 @@
+/*
+Cauã Grigolatto (AQ3022323)
+Gabriel Ventura (AQ3023672)
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,7 +15,7 @@
 #endif
 
 typedef struct Message {
-    char authorEmail[100];
+    char *authorEmail;
     char textContent[500];
     bool isRead;
 } Message;
@@ -27,7 +32,7 @@ void listMessages(Message inbox[], int totalMessages);
 void readMessage(Message *message);
 void showMessagePreview(char message[]);
 int getTotalUnreadMessages(Message inbox[], int totalMessages);
-Message createMessage(char authorEmail[100]);
+Message createMessage(User *author);
 
 User createUser();
 int getIndexByEmail(char email[], User users[], int totalUsers);
@@ -213,7 +218,7 @@ int main() {
                         bool isToItself = areStringsEqual(users[userIndex].email, onlineUser->email);
 
                         if (! isToItself) {
-                            Message message = createMessage(onlineUser->email);
+                            Message message = createMessage(onlineUser);
 
                             User *targetUser = &users[userIndex];
                             
@@ -457,9 +462,9 @@ int getTotalUnreadMessages(Message inbox[], int totalMessages) {
     return unreadMessages;
 }
 
-Message createMessage(char authorEmail[100]) {
+Message createMessage(User *author) {
     Message message;
-    strcpy(message.authorEmail, authorEmail);
+    message.authorEmail = author->email;
 
     printf("Mensagem:\n\n");
     scanf("%[^\n]", message.textContent);
